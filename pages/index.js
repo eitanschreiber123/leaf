@@ -1,111 +1,82 @@
 import React, { Component } from 'react'
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
-import Products from '/data'
-import Nav from 'components/Nav'
 import styled from 'styled-components'
-import { getSortedPostsData } from '/lib/posts'
+import dynamic from 'next/dynamic';
+const Slide = dynamic(() => import('react-slideshow-image').then((slideshow) => slideshow.Slide),{ ssr: false })
 const Wrapper = styled.div`
   width: 100%;
   margin: 0;
   padding: 0;
-  .header {
+  .po, .two {
     width: 100%;
+    padding: 0;
     display: flex;
     flex-direction: row;
+  }
+  .po {
     justify-content: center;
-    color: black;
   }
-  .first {
-    width: 100%;
-    height: 300px;
-    margin: 0;
-    padding: 0;
-    background-image: url('/header.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
-  .p-first, .p-second {
-    text-align: center;
-    margin-top: 50px;
+  .two {
     margin-bottom: 50px;
+    justify-content: space-evenly;
   }
-  .farms {
+  .po p, .two p {
+    text-align: center;
+  }
+  footer {
     width: 100%;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: stretch;
-  }
-  .farms div {
-    width: 100%;
-    height: 300px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
-  .farm-1 {
-    background-image: url('/farm1.jpg');
-  }
-  .farm-2 {
-    background-image: url('/farm2.jpg');
-  }
-  .farm-3 {
-    background-image: url('/farm3.jpeg');
-  }
-  .header-s {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    height: 200px;
     color: black;
-  }
-  .products {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-  .prodicts p {
-    text-align: center;
-  }
-  .product-image {
-    width: 100px;
-    height: 100px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
   }
 `
+const slideImages = [
+  `/first.jpg`,
+  `/second.jpg`
+]
+const pr = {
+  duration: 5000,
+  transitionDuration: 500,
+  infinite: true,
+  indicators: true,
+  arrows: true,
+  pauseOnHover: true,
+  autoplay: true
+}
 class IndexPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
   render() {
     return (
       <Wrapper>
-        <Nav/>
-        <div className="header"><h1>Rotuman Exports</h1></div>
-        <div className="first"></div>
-        <p className="p-first">Rotuma is a beautiful island about 620km north of fiji with incredible nature and picturesque beaches and an abundance of crops</p>
-        <div className="farms">
-          <div className="farm-1"></div>
-          <div className="farm-2"></div>
-          <div className="farm-3"></div>
+      <h1 style={{position: `absolute`, zIndex: 5}}>Leaf Mold</h1>
+      <Slide {...pr}>
+        <div style={{height: `90vh`, width: `100vw`}}><div style={{height: `100%`, width: `100vw`, 'backgroundImage': `url(${slideImages[0]})`, baxkgroundRepeat: `no-repeat`, backgroundPosition: `center`, backgroundSize: `cover`, display: `flex`, flexDirection: `row`, alignItems: `center`, justifyContent: `center`}}>
+          <div style={{display: `flex`, flexDirection: `column`}}>
+            <p>Improved soil from leaf mold</p>
+            <div style={{padding: `20px`, color: `black`, border: `2px solid black`, textAlign: `center`}}><p>Buy leaf mold</p></div>
+          </div>
         </div>
-        <p className="p-second">We are the exclusive exporter of rotuman products, we ship worldwide and offer premium products and service</p>
-        <div className="header-s"><h1>Explore Our Products</h1></div>
-        <div className="products">{Products.map(p => <Link href="/p/[id]" as={`/p/${p.route}`}><a><div style={{margin: `50px`, display: `column`}}><div style={{backgroundImage: `url(${p.image})`}} className="product-image"></div><p>{p.other ? p.other : p.id}</p></div></a></Link>)}</div>
+        </div>
+        <div style={{height: `90vh`, width: `100vw`}}><div style={{height: `100%`, width: `100vw`, 'backgroundImage': `url(${slideImages[1]})`, baxkgroundRepeat: `no-repeat`, backgroundPosition: `center`, backgroundSize: `cover`, display: `flex`, flexDirection: `row`, alignItems: `center`, justifyContent: `center`}}>
+          <div style={{display: `flex`, flexDirection: `column`}}>
+            <p>Turn your leaves into mold</p>
+            <div style={{padding: `20px`, color: `black`, border: `2px solid black`, textAlign: `center`}}><p>Learn more</p></div>
+          </div>
+        </div>
+        </div>
+      </Slide>
+      <div className="po"><p>leaf mold can be used to enhance soil quality which imroves crop yield</p></div>
+      <div className="two">
+        <p>we sell a kit with instructions to collect leaves and send it back to us and<br/> when we sell it you get a check <br/>Learn more</p>
+        <p>we offer different options for buying leaf mold <br/><Link href="/buy"><a>Learn more</a></Link></p>
+      </div>
+      <footer></footer>
       </Wrapper>
     )
   }
 }
 export default IndexPage
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
-  return {
-    props: {
-      allPostsData
-    }
-  }
-}
